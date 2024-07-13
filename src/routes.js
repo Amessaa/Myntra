@@ -6,6 +6,7 @@ import Productpage from "./Productpage";
 import Style from "./Style";
 import ViewMore from "./ViewMore";
 import Orders from "./Orders";
+import My_avataar from "./My_avataar";
 
 export default function AppRoutes() {
   return (
@@ -17,6 +18,7 @@ export default function AppRoutes() {
         <Route path="/style" element={<Style />}></Route>
         <Route path="/viewmore" element={<ViewMore />}></Route>
         <Route path="/orders" element={<Orders />}></Route>
+        <Route path="/my_avatars" element={<My_avataar />}></Route>
       </Routes>
     </BrowserRouter>
   );

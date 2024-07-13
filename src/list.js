@@ -3,7 +3,7 @@ import React from 'react'
 export default function List() {
   return (
     <div>
-      LIST
+      <img src='/images/list.jpeg' />
     </div>
   )
 }
