@@ -1,16 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { IoSearchCircle, IoPersonCircle } from "react-icons/io5";
 import { FaCamera, FaPlus } from "react-icons/fa";
 import { CiMicrophoneOn, CiBellOn, CiHeart } from "react-icons/ci";
 import { BsStars } from "react-icons/bs";
-import { WiStars } from "react-icons/wi";
 
 export default function Home() {
   const navigate = useNavigate();
-  // const viewhandler=(linked_route)=>{
-  //    navigate(`/${linked_route}`)
-  // }
+  const [inputText, setinputText] = useState("");
+  useEffect(() => {
+    inputText == "women " && navigate("/list");
+  }, [inputText]);
   return (
     <div className="overflow-hidden">
       <div className=" mx-auto justify-center text-center text-3xl ">
@@ -29,6 +29,7 @@ export default function Home() {
               type="text"
               placeholder="Search your style"
               className="m-2 border-white bg-black rounded-3xl py-2 px-4 focus:outline-none focus:ring-2 focus:ring-white/50 w-8/9 h-3/4"
+              onChange={(e) => setinputText(e.target.value)}
             />
             <FaCamera className="m-1 ml-5 w-8 h-8" />
             <CiMicrophoneOn className="m-1 w-8 h-8" />
@@ -42,7 +43,7 @@ export default function Home() {
           <div className="justify-center p-2 px-2 text-sm font-bold flex items-center">
             <button
               className="p-4 mx-4 bg-pink-500/60 rounded-full border-2 border-black flex items-center"
-              onClick={() => navigate("/list")}
+              onClick={() => navigate("/viewmore")}
             >
               <FaPlus className="p-1 w-6 h-6" />
               VIEW MORE
