@@ -66,11 +66,11 @@ const Home = () => {
   };
 
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden h-full">
       <div className="mx-auto justify-center text-center text-3xl">
         <div className="font-bold text-black-600">
           <div className="flex flex-row">
-            <img className="hi" src="/images/home_header1.jpeg" alt="Header 1" />
+            <img className="hi" src="/images/home_header1.jpeg" alt="Header 1"  />
             <div className="m-0 bg-black/90 border-none p-4 flex w-full h-100 items-center text-gray-200">
               <button onClick={handleNotificationsClick}>
                 <CiBellOn />
@@ -96,7 +96,7 @@ const Home = () => {
         </div>
         <div className="justify-center bg-yellow-100/50">
           <div>
-            <img className="w-full h-70" src="/images/home_body.jpeg" alt="Body" />
+            <img className="w-full h-full" src="/images/home_body.jpeg" alt="Body" />
           </div>
           <div className="justify-center p-2 px-2 text-sm font-bold flex items-center">
             <button
