@@ -7,6 +7,7 @@ import Style from "./Style";
 import ViewMore from "./ViewMore";
 import Orders from "./Orders";
 import My_avataar from "./My_avataar";
+import Notifications from "./notifications";
 
 export default function AppRoutes() {
   return (
@@ -19,6 +20,7 @@ export default function AppRoutes() {
         <Route path="/viewmore" element={<ViewMore />}></Route>
         <Route path="/orders" element={<Orders />}></Route>
         <Route path="/my_avatars" element={<My_avataar />}></Route>
+        <Route path="/notifications" element={<Notifications/>}></Route>
       </Routes>
     </BrowserRouter>
   );

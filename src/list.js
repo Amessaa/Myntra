@@ -1,9 +1,16 @@
-import React from 'react'
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function List() {
+  const navigate = useNavigate();
   return (
     <div>
-     IMAGES OF ITEMS
+      <img src="/images/list/list.jpg" />
+      <button
+        onClick={()=>{navigate('/product')}}
+        className="absolute top-0 left-0 w-full h-full opacity-0"
+        aria-label="Navigate to products"
+      />
     </div>
-  )
+  );
 }

@@ -10,8 +10,7 @@ const Style = () => {
     { id: 1, url: "/images/style/blue_top.jpeg" },
     { id: 2, url: "/images/style/lavender_top.jpeg" },
     { id: 4, url: "/images/style/skirt.jpeg" },
-    { id: 5, url: "/images/style/trowsers.jpeg" },
-    // Add more images as needed
+    { id: 5, url: "/images/style/trowsers.jpeg" },    
   ];
 
   // Function to toggle selection of an image
@@ -27,7 +26,7 @@ const Style = () => {
   return (
     <div className="m-0 p-4 bg-slate-500 overflow-scroll h-full">
       <h1 className="text-6xl font-bold font-sans m-4 text-black/70"> STYLE</h1>
-      <h1 className="my-10 text-xl font-semibold font-serif m-4 text-black/70">CREATE YOUR OWN AVATAARS</h1>
+      <h1 className="my-10 mb-6 p-3 rounded-2xl text-xl font-semibold font-serif m-4 text-black/70 bg-white">CREATE YOUR OWN AVATAARS</h1>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {images.map((image) => (
           <div key={image.id} className="relative">
@@ -55,9 +54,9 @@ const Style = () => {
       <div className="flex justify-center mt-4">
         <Link
           to="/my_avatars"
-          className="m-2 bg-pink-500/70 hover:bg-pink-600/80 text-white py-3 px-4 rounded-lg"
+          className="m-2 font-semibold font-sans border-4 border-black bg-white/70 hover:bg-white/80 text-black/90 py-3 px-4 rounded-lg"
         >
-          CREATE YOUR AVATAR
+          CREATE
         </Link>
       </div>
     </div>
