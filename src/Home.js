@@ -10,11 +10,15 @@ import { auth } from './firebase';
 import Notification from './Notification'; 
 
 const Home = () => {
+  
   const navigate = useNavigate();
   const [inputText, setInputText] = useState('');
   const [notifications, setNotifications] = useState([]);
   const [latestNotification, setLatestNotification] = useState(null);
-  const [showNotifications, setShowNotifications] = useState(false); // State for showing/hiding notifications
+  const [showNotifications, setShowNotifications] = useState(false); 
+  useEffect(()=>{
+    (inputText=='women ' && navigate('/list'))
+  },[inputText])
 
   useEffect(()=>{
     (inputText == 'women ' && navigate('/list'))
