@@ -1,15 +1,14 @@
-
 import React from "react";
-import { GiAerialSignal } from "react-icons/gi";
 
-const InspirationItem = ({ imageUrl, inspiredBy, onClickExplore }) => {
+
+const InspirationItem = ({ imageUrl, inspiredBy,likes,shares,saves, onClickExplore }) => {
   const handleExploreClick = () => {
-    onClickExplore && onClickExplore();
+    onClickExplore && onClickExplore({imageUrl,likes,shares,saves});
   };
 
   return (
     <div className="inline-block mr-4">
-      <img className="w-40 h-40 rounded-md" src={imageUrl} alt={`Inspiration`} />
+      <img className="w-40 h-40 rounded-md" src={imageUrl}  />
       <div className="text-sm text-gray-600">
       <span style={{ display: "block" }}>Inspired By</span>
         <span style={{ display: "block",fontSize:20, fontWeight: "bold", color: "black",fontStyle:"-moz-initial"}}>{inspiredBy}</span>

@@ -1,11 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
 import InspirationItem from "./InspirationItem";
-import { inspirationData } from "./utilities/data";
+import { db, storage } from "./firebase"; // Ensure your Firebase configuration is imported correctly
+import { getDocs, collection, query, orderBy } from "firebase/firestore"; // Import Firestore functions
+import { getDownloadURL, ref } from "firebase/storage"; // Import Storage functions
 
 const ProductPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
+  const [inspirationData, setInspirationData] = useState([]);
+
+  useEffect(() => {
+    const fetchInspirationData = async () => {
+      try {
+        const q = query(collection(db, "inspiration"), orderBy('shares', 'desc'), orderBy('saves', 'desc'),orderBy('likes', 'desc'));
+        const querySnapshot = await getDocs(q);
+        const data = await Promise.all(querySnapshot.docs.map(async (doc) => {
+          const docData = doc.data();
+          const imageUrl = await getDownloadURL(ref(storage, docData.imageUrl));
+          return {
+            id: doc.id,
+            ...docData,
+            imageUrl
+          };
+        }));
+        setInspirationData(data);
+      } catch (error) {
+        console.error("Error fetching inspiration data:", error);
+      }
+    };
+
+    fetchInspirationData();
+  }, []);
 
   const openModal = (data) => {
     setModalData(data);
@@ -25,15 +51,18 @@ const ProductPage = () => {
         </div>
         <div className="justify-center bg-yellow-100/50 my-4">
           <div>
-            <img className="w-full h-70" src="/images/product_body.jpg" alt="Product Footer" />
+            <img className="w-full h-70" src="/images/product_body.jpg" alt="Product Body" />
           </div>
         </div>
         <div className="overflow-x-auto whitespace-nowrap my-4 px-4">
-          {inspirationData.map((item, index) => (
+          {inspirationData.map((item) => (
             <InspirationItem
-              key={index}
+              key={item.id}
               imageUrl={item.imageUrl}
               inspiredBy={item.inspiredBy}
+              likes={item.likes}
+              shares={item.shares}
+              saves={item.saves}
               onClickExplore={() => openModal(item)}
             />
           ))}

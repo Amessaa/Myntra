@@ -1,100 +1,128 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Heart, Send, Save } from "react-feather";
+import { db } from "./firebase"; 
+import { doc, updateDoc } from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 
 const Modal = ({ closeModal, data }) => {
-  const [likes, setLikes] = useState(0);
-  const [isLiked, setIsLiked] = useState(false);
-  const [shared, setShared] = useState(0);
-  const [saved, setSaved] = useState(0);
-  const [isSaved, setIsSaved] = useState(false);
-  const [isShareDropdownOpen, setIsShareDropdownOpen] = useState(false);
-  const [copyLinkMessage, setCopyLinkMessage] = useState("");
+  const { id, imageUrl, inspiredBy, likes, shares, saves, createdBy } = data;
+  const [localLikes, setLocalLikes] = useState(likes);
+  const [localShares, setLocalShares] = useState(shares);
+  const [localSaves, setLocalSaves] = useState(saves);
+  const [liked, setLiked] = useState(false);
+  const [saved, setSaved] = useState(false);
 
-  useEffect(() => {
-    if (data) {
-      setLikes(data.likes);
-      setShared(data.shares);
-      setSaved(data.saves);
-    }
-  }, [data]);
+  const handleLike = async () => {
+    if (!liked) {
+      // Update local state
+      setLocalLikes(prevLikes => prevLikes + 1);
+      setLiked(true);
 
-  const handleLikeClick = () => {
-    if (!isLiked) {
-      setLikes(likes + 1);
-      setIsLiked(true);
-    }
-  };
+      // Update Firestore inspiration document
+      await updateFirestore({ likes: localLikes + 1 });
 
-  const toggleShareDropdown = () => {
-    setIsShareDropdownOpen(!isShareDropdownOpen);
-  };
-
-  const handleSaveClick = () => {
-    if (!isSaved) {
-      setSaved(saved + 1);
-      setIsSaved(true);
+      // Send notification to createdBy user
+      const notificationMessage = `Amisha liked your inspiration`;
+      sendNotification(createdBy, notificationMessage);
     }
   };
 
-  const handleShareClick = () => {
-    setShared(shared + 1);
+  const handleShare = () => {
+    // Update local state
+    setLocalShares(prevShares => prevShares + 1);
+
+    // Update Firestore inspiration document
+    updateFirestore({ shares: localShares + 1 });
   };
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText("http://localhost:3004/product").then(() => {
-      setCopyLinkMessage("Link copied!");
-      setTimeout(() => {
-        setCopyLinkMessage("");
-      }, 2000); // Clear message after 2 seconds
-    }).catch(err => {
-      console.error('Failed to copy: ', err);
-    });
+  const handleSave = async () => {
+    if (!saved) {
+      // Update local state
+      setLocalSaves(prevSaves => prevSaves + 1);
+      setSaved(true);
+
+      // Update Firestore inspiration document
+      await updateFirestore({ saves: localSaves + 1 });
+    }
+  };
+
+  const updateFirestore = async (updateData) => {
+    try {
+      await updateDoc(doc(db, "inspiration", id), updateData);
+      console.log("Firestore updated successfully:", updateData);
+    } catch (error) {
+      console.error("Error updating Firestore:", error);
+    }
+  };
+
+  const sendNotification = async (recipientUserId, message) => {
+    try {
+      // Add a notification to recipient's notifications collection
+      const notificationsRef = collection(db, `users/${recipientUserId}/notifications`);
+      await addDoc(notificationsRef, {
+        message,
+        timestamp: new Date(),
+        read: false,
+      });
+      console.log("Notification sent successfully:", message);
+    } catch (error) {
+      console.error("Error sending notification:", error);
+    }
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg text-center">
-        {data && (
-          <>
-            <img src={data.imageUrl} alt={data.inspiredBy} className="w-full mb-4" />
+    <div className="fixed top-0 left-0 right-0 bottom-0 flex items-center justify-center z-50 bg-gray-900 bg-opacity-50">
+      <div className="max-w-lg bg-white p-8 rounded-lg shadow-lg">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold">Inspiration Details</h2>
+          <button
+            onClick={closeModal}
+            className="text-gray-600 hover:text-gray-800"
+          >
+            Close
+          </button>
+        </div>
+        <div className="flex flex-col items-center">
+          <img
+            src={imageUrl}
+            alt="Inspiration"
+            className="w-full h-64 object-cover rounded-lg mb-4"
+          />
+          <div className="text-center">
+            <h3 className="text-lg font-bold mb-2">{inspiredBy}</h3>
             <div className="flex items-center justify-center space-x-4">
-              <div className="flex items-center">
-                <span className="mr-2">{likes}</span>
-                <button onClick={handleLikeClick} className="text-2xl">
-                  <Heart className={`w-6 h-6 ${isLiked ? "text-pink-500 fill-current" : "text-black"}`} />
-                </button>
+              <div
+                className="flex items-center cursor-pointer"
+                onClick={handleLike}
+              >
+                <Heart
+                  className={`text-gray-600 ${
+                    liked ? "text-pink-500" : "hover:text-pink-500"
+                  }`}
+                />
+                <span className="ml-1">{localLikes}</span>
               </div>
-              <div className="flex items-center relative">
-                <span className="mr-2">{saved}</span>
-                <button onClick={handleSaveClick} className="text-2xl">
-                  <Save className={`w-6 h-6 ${isSaved ? "text-pink-500 fill-current" : "text-black"}`} />
-                </button>
+              <div
+                className="flex items-center cursor-pointer"
+                onClick={handleShare}
+              >
+                <Send className="text-gray-600 hover:text-pink-500" />
+                <span className="ml-1">{localShares}</span>
               </div>
-              <div className="flex items-center relative">
-                <span className="mr-2">{shared}</span>
-                <button onClick={toggleShareDropdown} className="text-2xl">
-                  <Send className={`w-6 h-6 text-black`} />
-                </button>
-                {isShareDropdownOpen && (
-                  <div className="absolute left-0 top-10 bg-white p-2 shadow-lg rounded-lg">
-                    <button onClick={handleShareClick} className="px-2 py-1 bg-blue-500 text-white mb-1 block w-full rounded">
-                      Share
-                    </button>
-                    <button onClick={handleCopyLink} className="px-2 py-1 bg-gray-200 text-black block w-full rounded">
-                      Copy Link
-                    </button>
-                    {copyLinkMessage && (
-                      <p className="text-green-500 mt-2">{copyLinkMessage}</p>
-                    )}
-                  </div>
-                )}
+              <div
+                className="flex items-center cursor-pointer"
+                onClick={handleSave}
+              >
+                <Save
+                  className={`text-gray-600 ${
+                    saved ? "text-pink-500" : "hover:text-pink-500"
+                  }`}
+                />
+                <span className="ml-1">{localSaves}</span>
               </div>
             </div>
-          </>
-        )}
-        <button onClick={closeModal} className="mt-4 p-2 bg-pink-500 text-white rounded">
-          Close
-        </button>
+          </div>
+        </div>
       </div>
     </div>
   );
