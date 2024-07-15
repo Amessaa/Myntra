@@ -16,6 +16,9 @@ const Home = () => {
   const [latestNotification, setLatestNotification] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false); // State for showing/hiding notifications
 
+  useEffect(()=>{
+    (inputText == 'women ' && navigate('/list'))
+  },[inputText])
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
