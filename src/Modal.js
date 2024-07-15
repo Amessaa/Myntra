@@ -22,7 +22,7 @@ const Modal = ({ closeModal, data }) => {
       await updateFirestore({ likes: localLikes + 1 });
 
       // Send notification to createdBy user
-      const notificationMessage = `Amisha liked your inspiration`;
+      const notificationMessage = `Amisha liked your inspiration!`;
       sendNotification(createdBy, notificationMessage);
     }
   };

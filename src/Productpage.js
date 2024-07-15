@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
 import InspirationItem from "./InspirationItem";
-import { db, storage } from "./firebase"; // Ensure your Firebase configuration is imported correctly
-import { getDocs, collection, query, orderBy } from "firebase/firestore"; // Import Firestore functions
-import { getDownloadURL, ref } from "firebase/storage"; // Import Storage functions
+import { db, storage } from "./firebase"; 
+import { getDocs, collection, query, orderBy } from "firebase/firestore"; 
+import { getDownloadURL, ref } from "firebase/storage"; 
 
 const ProductPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
