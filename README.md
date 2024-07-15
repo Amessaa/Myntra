@@ -1,6 +1,5 @@
 # To run this project for Demo
 
-## Available Scripts
 
 In the project directory, you can run:
 
